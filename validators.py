@@ -29,18 +29,18 @@ def validate_role(role: str) -> bool:
         return False
 
 def validate_username(username: str) -> bool:
-    # Sin espacios, sin acentos, sí permite caracteres especiales
-    pattern = r'^[A-Za-zÑñ0-9!"#$%&\'()*+,-./:<=>?@[\]^_`{|}~]*$'
+    # Sin espacios, sin acentos, sí permite caracteres especiales, no puede estar vacío
+    pattern = r'^[A-Za-zÑñ0-9!"#$%&\'()*+,-./:<=>?@[\]^_`{|}~]+$'
     return bool(re.match(pattern, username))
 
 def validate_password(password: str) -> bool:
     # Solo alfanumérico
-    # Con espacios, con acentos, sí permite caracteres especiales
-    pattern = r'^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 !"#$%&\'()*+,-./:<=>?@[\]^_`{|}~]*$'
+    # Con espacios, con acentos, sí permite caracteres especiales, no puede estar vacío
+    pattern = r'^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 !"#$%&\'()*+,-./:<=>?@[\]^_`{|}~]+$'
     return bool(re.match(pattern, password)) 
 
 def validate_address(address: str) -> bool:
     # Solo alfanumérico
-    # Con espacios, con acentos, sí permite caracteres especiales
-    pattern = r'^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 !"#$%&\'()*+,-./:<=>?@[\]^_`{|}~]*$'
+    # Con espacios, con acentos, sí permite caracteres especiales, no puede estar vacío
+    pattern = r'^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 !"#$%&\'()*+,-./:<=>?@[\]^_`{|}~]+$'
     return bool(re.match(pattern, address)) 

@@ -86,19 +86,19 @@ class UserCreate(BaseModel):
     @field_validator('username')
     def validate_username(cls, v):
         if not validate_username(v):
-            raise ValueError('El campo username solo permite caracteres alfanuméricos, además, no puede contener espacios ni acentos')
+            raise ValueError('El campo username solo permite caracteres alfanuméricos, además, no puede contener espacios ni acentos, ni estar vacío')
         return v
 
     @field_validator('password')
     def validate_password(cls, v):
         if not validate_password(v):
-            raise ValueError('El campo password solo permite caracteres alfanuméricos')
+            raise ValueError('El campo password solo permite caracteres alfanuméricos y no puede estar vacío')
         return v
 
     @field_validator('address')
     def validate_address(cls, v):
         if not validate_address(v):
-            raise ValueError('El campo address solo permite caracteres alfanuméricos')
+            raise ValueError('El campo address solo permite caracteres alfanuméricos y no puede estar vacío')
         return v
     
 class UserUpdate(BaseModel):

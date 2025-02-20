@@ -262,7 +262,7 @@ curl -X 'POST' \
 - **Descripción:** Actualiza todos los campos de un usuario. 
 - **Acceso:** Solo accesible por usuarios con rol `admin`.
 - **Parámetros:**
-  - `username`: username del de usuario a actualizar (se coloca en el URL).
+  - `username`: username del usuario a actualizar (se coloca en el URL).
 - **Request body: Type `application/json`**
   - `username (str)`: Username del usuario (solo caracteres alfanuméricos, además, no puede contener espacios ni acentos).
   - `password (str)`: Contraseña del usuario (solo caracteres alfanuméricos).
@@ -319,7 +319,7 @@ curl -X 'PUT' \
 - **Descripción:** Actualiza campos específicos de un usuario. 
 - **Acceso:** Solo accesible por usuarios con rol `admin`.
 - **Parámetros:**
-  - `username`: username del de usuario a actualizar (se coloca en el URL).
+  - `username`: username del usuario a actualizar (se coloca en el URL).
 - **Request body: Type `application/json`** 
 `updates`: Campos a actualizar en formato JSON, todos los campos son **opcionales**.
   - `username (str)`: Username del usuario (solo caracteres alfanuméricos, además, no puede contener espacios ni acentos).
@@ -371,7 +371,7 @@ curl -X 'PATCH' \
 - **Descripción:** Elimina un usuario. 
 - **Acceso:** Solo accesible por usuarios con rol `admin`.
 - **Parámetros:**
-  - `username`: username del de usuario a eliminar (se coloca en el URL).
+  - `username`: username del usuario a eliminar (se coloca en el URL).
 - **Respuesta:** Mensaje de confirmación.
 
 **Ejemplo de Solicitud:**
@@ -434,7 +434,7 @@ curl -X 'GET' \
 - **Descripción:** Actualiza solo el campo de domicilio de un usuario. 
 - **Acceso:** Accesible por usuarios con roles `admin` o `update_address`.
 - **Parámetros:**
-  - `username`: username del de usuario a actualizar (se coloca en el URL).
+  - `username`: username del usuario a actualizar (se coloca en el URL).
 - **Request body: Type `application/json`** 
   - `address (str)`: Domicilio del usuario (solo caracteres alfanuméricos).
 - **Respuesta:** Devuelve los datos actualizados del usuario (únicamente username y domicilio).

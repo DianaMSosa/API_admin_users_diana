@@ -23,7 +23,7 @@ def validate_date(date: str) -> bool:
         return False
 
 def validate_role(role: str) -> bool:
-    if role in ['admin', 'read', 'update_domicilio']:
+    if role in ['admin', 'read', 'update_address']:
         return True
     else:
         return False

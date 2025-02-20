@@ -11,13 +11,13 @@ Creado por: **Diana Karina Martínez Sosa**
 2. [Información relevante para pruebas](#info-pruebas)
 3. [Autenticación](#autenticación)
 4. [Endpoints](#endpoints)
-   - [Crear Usuario](#crear-usuario)
    - [Obtener Todos los Usuarios](#obtener-todos-los-usuarios)
-   - [Obtener Domicilios de Usuarios](#obtener-domicilios-de-usuarios)
+   - [Crear Usuario](#crear-usuario)
    - [Actualizar Usuario](#actualizar-usuario)
-   - [Eliminar Usuario](#eliminar-usuario)
    - [Actualización Parcial de Usuario](#actualización-parcial-de-usuario)
-   - [Actualización Parcial de Domicilio](#actualización-parcial-de-domicilio)
+   - [Eliminar Usuario](#eliminar-usuario)
+   - [Obtener Domicilios de Usuarios](#obtener-domicilios-de-usuarios)
+   - [Actualización únicamente de Domicilio](#actualización-parcial-de-domicilio)
 5. [Modelos de Datos](#modelos-de-datos)
 6. [Consideraciones de Seguridad](#consideraciones-de-seguridad)
 
@@ -43,6 +43,7 @@ Creado por: **Diana Karina Martínez Sosa**
             3.	Ejecutar:	**python -m pip install --upgrade pip**
         - En Linux y Mac OS:
             1.	Ejecutar: 	**python -m venv api_diana_env**
+                - Nota: En caso de que la versión por defecto sea python 2, se tendría que ejecutar como **python3 -m venv api_diana_env**
             2.	Ejecutar:	**source api_diana_env/bin/activate**
             3.	Ejecutar:	**python -m pip install --upgrade pip**
 
@@ -51,7 +52,7 @@ Creado por: **Diana Karina Martínez Sosa**
     ```
     API_evaluacion_diana/
     │── API_admin_users_diana/   # Carpeta con el código de la API
-    └── api_diana_env/          # Entorno virtual de Python
+    └── api_diana_env/           # Entorno virtual de Python
     ```
 
     En el IDE preferido, abrir el repositorio con el código de la API `API_admin_users_diana` y configurar como intérprete el entorno virtual que se creó previamente.
@@ -84,8 +85,8 @@ Creado por: **Diana Karina Martínez Sosa**
 FastAPI genera documentación automática basada en las rutas y modelos definidos en la aplicación. Esta documentación se puede acceder de forma interactiva y permite realizar pruebas directamente desde el navegador.  
 
 FastAPI proporciona dos interfaces principales para la documentación:  
-- **Swagger UI**: Disponible en `http://127.0.0.1:8000/docs`, ofrece una interfaz visual para probar los endpoints de la API.  
-- **ReDoc**: Disponible en `http://127.0.0.1:8000/redoc`, presenta la documentación en un formato estructurado y detallado.  
+- **Swagger UI**: Disponible en `127.0.0.1:8000/docs`, ofrece una interfaz visual para probar los endpoints de la API.  
+- **ReDoc**: Disponible en `127.0.0.1:8000/redoc`, presenta la documentación en un formato estructurado y detallado.  
 
 Estas herramientas facilitan la exploración y prueba de la API sin necesidad de herramientas externas.
 
@@ -110,14 +111,14 @@ Los tokens generados tienen una vigencia de 3 horas para fines de suficiencia en
 
 La base de datos cuenta previamente con 3 usuarios, uno para cada rol existente con el fin de hacer pruebas. Estos son sus datos de acceso:
 1. **Usuario con rol de administrador (admin):**
-    - `username`: ejemplo_admin
-    - `password`: 123456
+    - `username`:ejemplo_admin
+    - `password`:123456
 1. **Usuario con rol de lector (read):**
-    - `username`: ejemplo_lector
-    - `password`: 654321
+    - `username`:ejemplo_lector
+    - `password`:654321
 1. **Usuario con rol que permite ver y editar direcciones (update_address):**
-    - `username`: ejemplo_editor_direcciones
-    - `password`: abcdef
+    - `username`:ejemplo_editor_direcciones
+    - `password`:abcdef
 
 **Ejemplo de Solicitud:**
 ```bash
@@ -205,15 +206,15 @@ curl -X 'GET' \
 - **Descripción:** Crea un nuevo usuario. 
 - **Acceso:** Solo accesible por usuarios con rol `admin`.
 - **Request body: Type `application/json`**
-  - `username`: Username del usuario.
-  - `password`: Contraseña del usuario.
-  - `role`: Rol del usuario (`admin`, `read`, `update_domicilio`).
-  - `curp`: CURP del usuario.
-  - `cp`: Código Postal del usuario.
-  - `rfc`: RFC del usuario.
-  - `phone`: Teléfono del usuario.
-  - `birthdate`: Fecha de nacimiento del usuario (formato `dd-mm-yyyy`).
-  - `address`: Domicilio del usuario.
+  - `username (str)`: Username del usuario (solo caracteres alfanuméricos, además, no puede contener espacios ni acentos).
+  - `password (str)`: Contraseña del usuario (solo caracteres alfanuméricos).
+  - `role (str)`: Rol del usuario (`admin`, `read`, `update_address`).
+  - `curp (str)`: CURP del usuario (formato oficial). 
+  - `cp (str)`: Código Postal del usuario (solo caracteres numéricos, 5 dígitos).
+  - `rfc (str)`: RFC del usuario (formato oficial).
+  - `phone (str)`: Teléfono del usuario (solo caracteres numéricos, 10 dígitos).
+  - `birthdate (str)`: Fecha de nacimiento del usuario (formato `dd-mm-yyyy`).
+  - `address (str)`: Domicilio del usuario (solo caracteres alfanuméricos).
 - **Respuesta:** Devuelve los datos del usuario creado, excluyendo la contraseña.
 
 **Ejemplo de Solicitud:**
@@ -263,15 +264,15 @@ curl -X 'POST' \
 - **Parámetros:**
   - `username`: username del de usuario a actualizar (se coloca en el URL).
 - **Request body: Type `application/json`**
-  - `username`: Username del usuario.
-  - `password`: Contraseña del usuario.
-  - `role`: Rol del usuario (`admin`, `read`, `update_domicilio`).
-  - `curp`: CURP del usuario.
-  - `cp`: Código Postal del usuario.
-  - `rfc`: RFC del usuario.
-  - `phone`: Teléfono del usuario.
-  - `birthdate`: Fecha de nacimiento del usuario (formato `dd-mm-yyyy`).
-  - `address`: Domicilio del usuario.
+  - `username (str)`: Username del usuario (solo caracteres alfanuméricos, además, no puede contener espacios ni acentos).
+  - `password (str)`: Contraseña del usuario (solo caracteres alfanuméricos).
+  - `role (str)`: Rol del usuario (`admin`, `read`, `update_address`).
+  - `curp (str)`: CURP del usuario (formato oficial). 
+  - `cp (str)`: Código Postal del usuario (solo caracteres numéricos, 5 dígitos).
+  - `rfc (str)`: RFC del usuario (formato oficial).
+  - `phone (str)`: Teléfono del usuario (solo caracteres numéricos, 10 dígitos).
+  - `birthdate (str)`: Fecha de nacimiento del usuario (formato `dd-mm-yyyy`).
+  - `address (str)`: Domicilio del usuario (solo caracteres alfanuméricos).
 - **Respuesta:** Devuelve los datos actualizados del usuario.
 
 **Ejemplo de Solicitud:**
@@ -321,15 +322,15 @@ curl -X 'PUT' \
   - `username`: username del de usuario a actualizar (se coloca en el URL).
 - **Request body: Type `application/json`** 
 `updates`: Campos a actualizar en formato JSON, todos los campos son **opcionales**.
-  - `username`: Username del usuario.
-  - `password`: Contraseña del usuario.
-  - `role`: Rol del usuario (`admin`, `read`, `update_domicilio`).
-  - `curp`: CURP del usuario.
-  - `cp`: Código Postal del usuario.
-  - `rfc`: RFC del usuario.
-  - `phone`: Teléfono del usuario.
-  - `birthdate`: Fecha de nacimiento del usuario (formato `dd-mm-yyyy`).
-  - `address`: Domicilio del usuario.
+  - `username (str)`: Username del usuario (solo caracteres alfanuméricos, además, no puede contener espacios ni acentos).
+  - `password (str)`: Contraseña del usuario (solo caracteres alfanuméricos).
+  - `role (str)`: Rol del usuario (`admin`, `read`, `update_address`).
+  - `curp (str)`: CURP del usuario (formato oficial). 
+  - `cp (str)`: Código Postal del usuario (solo caracteres numéricos, 5 dígitos).
+  - `rfc (str)`: RFC del usuario (formato oficial).
+  - `phone (str)`: Teléfono del usuario (solo caracteres numéricos, 10 dígitos).
+  - `birthdate (str)`: Fecha de nacimiento del usuario (formato `dd-mm-yyyy`).
+  - `address (str)`: Domicilio del usuario (solo caracteres alfanuméricos).
 - **Respuesta:** Devuelve los datos actualizados del usuario.
 
 **Ejemplo de Solicitud:**
@@ -395,7 +396,7 @@ curl -X 'DELETE' \
 - **Endpoint:** `/users/domicilio`
 - **Método:** `GET`
 - **Descripción:** Devuelve una lista de usuarios con solo su username y domicilio. 
-- **Acceso:** Accesible por usuarios con roles `admin`, `read`, o `update_domicilio`.
+- **Acceso:** Accesible por usuarios con roles `admin`, `read`, o `update_address`.
 - **Respuesta:** Lista de usuarios con username y domicilio.
 
 **Ejemplo de Solicitud:**
@@ -431,11 +432,11 @@ curl -X 'GET' \
 - **Endpoint:** `/users/domicilio/{username}`
 - **Método:** `PATCH`
 - **Descripción:** Actualiza solo el campo de domicilio de un usuario. 
-- **Acceso:** Accesible por usuarios con roles `admin` o `update_domicilio`.
+- **Acceso:** Accesible por usuarios con roles `admin` o `update_address`.
 - **Parámetros:**
   - `username`: username del de usuario a actualizar (se coloca en el URL).
 - **Request body: Type `application/json`** 
-  - `address`: Domicilio del usuario.
+  - `address (str)`: Domicilio del usuario (solo caracteres alfanuméricos).
 - **Respuesta:** Devuelve los datos actualizados del usuario (únicamente username y domicilio).
 
 **Ejemplo de Solicitud:**
@@ -464,7 +465,7 @@ curl -X 'PATCH' \
 
 ### **UserCreate**
 - **Descripción:** Modelo para la creación de un usuario.
-- **Validaciones:** Este modelo contiene validaciones de formato para curp, cp, rfc, teléfono y fecha.
+- **Validaciones:** Este modelo contiene validaciones de formato para username, contraseña, rol, curp, cp, rfc, teléfono, fecha y dirección.
 - **Campos:**
   - `username`: Nombre de usuario.
   - `password`: Contraseña.
@@ -482,7 +483,7 @@ curl -X 'PATCH' \
 
 ### **UserUpdate**
 - **Descripción:** Modelo para la actualización de un usuario. Todos los campos son opcionales.
-- **Validaciones:** Este modelo contiene validaciones de formato para curp, cp, rfc, teléfono y fecha.
+- **Validaciones:** Este modelo contiene validaciones de formato para username, contraseña, rol, curp, cp, rfc, teléfono, fecha y dirección.
 - **Campos:** Los mismos `UserCreate`, pero todos los campos son opcionales.
 
 ### **UserResponse**

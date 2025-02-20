@@ -114,38 +114,56 @@ class UserUpdate(BaseModel):
 
     @field_validator('curp')
     def validate_curp(cls, v):
-        if v is not None and not validate_curp(v):
-            raise ValueError('Formato de CURP inválido...')
+        if not validate_curp(v):
+            raise ValueError('Formato de CURP inválido, no coincide con el formato oficial')  
         return v
 
     @field_validator('cp')
     def validate_cp(cls, v):
-        if v is not None and not validate_cp(v):
-            raise ValueError('Formato de Código Postal inválido...')
+        if not validate_cp(v):
+            raise ValueError('Formato de Código Postal inválido: El campo debe contener solo caracteres numéricos y ser de 5 digitos')
         return v
 
     @field_validator('rfc')
     def validate_rfc(cls, v):
-        if v is not None and not validate_rfc(v):
-            raise ValueError('Formato de RFC inválido...')
+        if not validate_rfc(v):
+            raise ValueError('Formato de RFC inválido, no coincide con el formato oficial')
         return v
 
     @field_validator('phone')
     def validate_phone(cls, v):
-        if v is not None and not validate_phone(v):
-            raise ValueError('Formato de Teléfono inválido...')
+        if not validate_phone(v):
+            raise ValueError('Formato de Teléfono inválido: El campo debe contener solo caracteres numéricos y ser de 10 digitos')
         return v
 
     @field_validator('birthdate')
     def validate_birthdate(cls, v):
-        if v is not None and not validate_date(v):
-            raise ValueError('Formato de Fecha inválido...')
+        if not validate_date(v):
+            raise ValueError('Formato de Fecha inválido: Debe ser dd-mm-yyyy')
         return v
 
     @field_validator('role')
     def validate_role(cls, v):
         if not validate_role(v):
             raise ValueError('El rol del usuario solo puede ser una de las siguientes opciones: admin, read, update_domicilio')
+        return v
+
+    @field_validator('username')
+    def validate_username(cls, v):
+        if not validate_username(v):
+            raise ValueError('El campo username solo permite caracteres alfanuméricos, además, no puede contener espacios ni acentos, ni estar vacío')
+        return v
+
+    @field_validator('password')
+    def validate_password(cls, v):
+        if not validate_password(v):
+            raise ValueError('El campo password solo permite caracteres alfanuméricos y no puede estar vacío')
+        return v
+
+    @field_validator('address')
+    def validate_address(cls, v):
+        if not validate_address(v):
+            raise ValueError('El campo address solo permite caracteres alfanuméricos y no puede estar vacío')
         return v
 
 # Modelo de usuario para respuesta sin la contraseña
@@ -176,13 +194,6 @@ class TokenData(BaseModel):
 # Configuración de OAuth2
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-# # Capturar errores 422 (Unprocessable Entity) y personalizar el mensaje
-# @app.exception_handler(RequestValidationError)
-# async def validation_exception_handler(request: Request, exc: RequestValidationError):
-#     return JSONResponse(
-#         status_code=422,
-#         content={"detail": "Entidad no procesable. La solicitud es semánticamente incorrecta, contiene datos no válidos o hay parámetros faltantes."},
-#     )
 
 # Función para cargar usuarios desde el archivo JSON
 def load_users():

@@ -26,7 +26,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class UserInDB(BaseModel):
     username: str
     hashed_password: str
-    role: str  # Roles: admin, read, update_domicilio
+    role: str  # Roles: admin, read, update_address
     curp: str
     cp: str
     rfc: str
@@ -80,7 +80,7 @@ class UserCreate(BaseModel):
     @field_validator('role')
     def validate_role(cls, v):
         if not validate_role(v):
-            raise ValueError('El rol del usuario solo puede ser una de las siguientes opciones: admin, read, update_domicilio')
+            raise ValueError('El rol del usuario solo puede ser una de las siguientes opciones: admin, read, update_address')
         return v
 
     @field_validator('username')
@@ -145,7 +145,7 @@ class UserUpdate(BaseModel):
     @field_validator('role')
     def validate_role(cls, v):
         if not validate_role(v):
-            raise ValueError('El rol del usuario solo puede ser una de las siguientes opciones: admin, read, update_domicilio')
+            raise ValueError('El rol del usuario solo puede ser una de las siguientes opciones: admin, read, update_address')
         return v
 
     @field_validator('username')
@@ -302,7 +302,7 @@ async def create_user(user: UserCreate, current_user: UserInDB = Depends(get_cur
     save_users(users)
     return UserResponse(**user_dict)
 
-# Ruta para obtener todos los usuarios (admin, read, update_domicilio)
+# Ruta para obtener todos los usuarios (admin, read, update_address)
 @app.get("/users/", response_model=List[UserResponse])
 async def read_users(current_user: UserInDB = Depends(get_current_user)):
     print(current_user.role)
@@ -313,7 +313,7 @@ async def read_users(current_user: UserInDB = Depends(get_current_user)):
 
     return [UserResponse(**user) for user in users]
 
-# Ruta para obtener todos los usuarios (admin, read, update_domicilio)
+# Ruta para obtener todos los domicilios de usuarios (admin, read, update_address)
 @app.get("/users/domicilio", response_model=List[UserResponseDomicilio])
 async def read_users(current_user: UserInDB = Depends(get_current_user)):
     print(current_user.role)
@@ -333,6 +333,9 @@ async def update_user(username: str, user: UserCreate, current_user: UserInDB = 
     user_to_update = next((u for u in users if u['username'] == username), None)
     if not user_to_update:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    if any(u['username'] == user.username for u in users) and username != user.username:
+        raise HTTPException(status_code=400, detail="Ya existe otro usuario con ese username")
     
     hashed_password = get_password_hash(user.password)
     user_to_update.update(user.model_dump())
@@ -367,6 +370,9 @@ async def patch_user(username: str, user: UserUpdate, current_user: UserInDB = D
     user_to_update = next((u for u in users if u["username"] == username), None)
     if not user_to_update:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    if any(u['username'] == user.username for u in users) and username != user.username:
+        raise HTTPException(status_code=400, detail="Ya existe otro usuario con ese username")
 
     # Aplicar solo los campos enviados
     updated_data = user.model_dump(exclude_unset=True)
